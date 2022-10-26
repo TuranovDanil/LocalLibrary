@@ -1,5 +1,4 @@
 """locallibrary URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.2/topics/http/urls/
 Examples:
@@ -14,28 +13,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.urls import include
 from django.urls import path
+from django.views.generic import RedirectView
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
-# Используйте include() чтобы добавлять URL из каталога приложения
-from django.urls import include
-from django.urls import path
 urlpatterns += [
-     path('catalog/', include('catalog.urls')),
+    path('catalog/', include('catalog.urls')),
 ]
 
-# Добавьте URL соотношения, чтобы перенаправить запросы с корневого URL, на URL приложения
-from django.views.generic import RedirectView
 urlpatterns += [
     path('', RedirectView.as_view(url='/catalog/', permanent=True)),
 ]
 
-# Используйте static() чтобы добавить соотношения для статических файлов
-# Только на период разработки
-from django.conf import settings
-from django.conf.urls.static import static
-
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+urlpatterns += [
+    path('accounts/', include('django.contrib.auth.urls')),
+]
